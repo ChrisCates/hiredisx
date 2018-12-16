@@ -10,63 +10,37 @@
 BOOST_AUTO_TEST_SUITE(Command)
 
 BOOST_AUTO_TEST_CASE(CommandPing) {
-    hiredisx::connect();
-
     redisReply* reply = hiredisx::op::command("PING");
     BOOST_CHECK_EQUAL(reply->str, "PONG");
     freeReplyObject(reply);
-
-    hiredisx::disconnect();
 }
 
 BOOST_AUTO_TEST_CASE(ApiSetFoo) {
-    hiredisx::connect();
-
     bool success = hiredisx::set("foo", "bar");
     BOOST_CHECK_EQUAL(success, true);
-
-    hiredisx::disconnect();
 }
 
 BOOST_AUTO_TEST_CASE(ApiGetFoo) {
-    hiredisx::connect();
-
     std::string foo = hiredisx::get("foo");
     BOOST_CHECK_EQUAL(foo, "bar");
-
-    hiredisx::disconnect();
 }
 
 BOOST_AUTO_TEST_CASE(ApiGetNonExistentKey) {
-    hiredisx::connect();
-
     std::string nothing = hiredisx::get("nonexistent");
     BOOST_CHECK_EQUAL(nothing, "");
-
-    hiredisx::disconnect();
 }
 
 BOOST_AUTO_TEST_CASE(ApiGetKeyError) {
-    hiredisx::connect();
-
     std::string nothing = hiredisx::get("error throwing key");
     BOOST_CHECK_EQUAL(nothing, "ERR wrong number of arguments for 'get' command");
-
-    hiredisx::disconnect();
 }
 
 BOOST_AUTO_TEST_CASE(ApiDelFoo) {
-    hiredisx::connect();
-
     bool deleted = hiredisx::del("foo");
     BOOST_CHECK_EQUAL(deleted, true);
-
-    hiredisx::disconnect();
 }
 
 BOOST_AUTO_TEST_CASE(ApiPushList) {
-    hiredisx::connect();
-
     bool pushed;
 
     pushed = hiredisx::push("list", "yo", "R");
@@ -77,13 +51,9 @@ BOOST_AUTO_TEST_CASE(ApiPushList) {
 
     pushed = hiredisx::push("list", "yung", "R");
     BOOST_CHECK_EQUAL(pushed, true);
-
-    hiredisx::disconnect();
 }
 
 BOOST_AUTO_TEST_CASE(ApiGetList) {
-    hiredisx::connect();
-
     std::vector<std::string> list = hiredisx::getList("list");
 
     BOOST_CHECK_EQUAL(list.size(), 3);
@@ -94,9 +64,6 @@ BOOST_AUTO_TEST_CASE(ApiGetList) {
 
     bool deleted = hiredisx::del("list");
     BOOST_CHECK_EQUAL(deleted, true);
-
-
-    hiredisx::disconnect();
 }
 
 BOOST_AUTO_TEST_SUITE_END()

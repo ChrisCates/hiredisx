@@ -6,29 +6,35 @@
 
 namespace hiredisx {
 
-    std::atomic<redisContext*> context;
+    struct OptionsStruct {
+        std::string host = "localhost";
+        int port = 6379;
+        int timeoutS = 5;
+        int timeoutNS = 0;
+    } options;
 
-    bool connect(std::string host = "localhost", int port = 6379, int timeoutS = 5, int timeoutNS = 0) {
+    redisContext* connect() {
         struct timeval timeoutStruct = {
-            timeoutS,
-            timeoutNS
+            options.timeoutS,
+            options.timeoutNS
         };
 
-        redisContext* ctx = redisConnectWithTimeout(host.c_str(), port, timeoutStruct);
-        context.store(ctx, std::memory_order_release);
-
-        if (ctx == NULL || ctx->err) {
-            return false;
-        } else {
-            return true;
-        }
+        redisContext* ctx = redisConnectWithTimeout(options.host.c_str(), options.port, timeoutStruct);
+        return ctx;
     }
 
-    bool disconnect() {
-        redisContext* context = hiredisx::context.load(std::memory_order_acquire);
+    bool disconnect(redisContext* context) {
         redisFree(context);
-
         return true;
+    }
+
+    bool canConnect() {
+        redisContext* ctx = hiredisx::connect();
+        int status = ctx->err;
+        
+        hiredisx::disconnect(ctx);
+
+        return status == 0 ? true : false;
     }
 
 }

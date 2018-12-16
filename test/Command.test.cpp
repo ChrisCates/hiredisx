@@ -37,6 +37,24 @@ BOOST_AUTO_TEST_CASE(ApiGetFoo) {
     hiredisx::disconnect();
 }
 
+BOOST_AUTO_TEST_CASE(ApiGetNonExistentKey) {
+    hiredisx::connect();
+
+    std::string nothing = hiredisx::get("nonexistent");
+    BOOST_CHECK_EQUAL(nothing, "");
+
+    hiredisx::disconnect();
+}
+
+BOOST_AUTO_TEST_CASE(ApiGetKeyError) {
+    hiredisx::connect();
+
+    std::string nothing = hiredisx::get("error throwing key");
+    BOOST_CHECK_EQUAL(nothing, "ERR wrong number of arguments for 'get' command");
+
+    hiredisx::disconnect();
+}
+
 BOOST_AUTO_TEST_CASE(ApiDelFoo) {
     hiredisx::connect();
 

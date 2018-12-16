@@ -10,7 +10,7 @@ PROJECT(hiredisx)
 INCLUDE("${CMAKE_CURRENT_LIST_DIR}/hiredis.cmake")
 
 INSTALL(
-  DIRECTORY ${CMAKE_SOURCE_DIR}/src
-  DESTINATION include
+  DIRECTORY ${CMAKE_SOURCE_DIR}/src/
+  DESTINATION "include/hiredisx"
   FILES_MATCHING PATTERN "*.hpp"
 )

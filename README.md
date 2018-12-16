@@ -36,6 +36,34 @@ make
 make install
 ```
 
+## Example Usage
+
+**Standard Usage:**
+
+```c++
+bool opened = hiredisx::connect();
+
+if (opened) {
+    bool set = hiredisx::set("foo", "bar"); // True if set
+
+    std::string foo = hiredisx::get("foo"); // "bar" if correct
+
+    bool deleted = hiredisx::del("foo"); // True if deleted
+
+    bool pushed = hiredisx::push("list", "yo", "R"); // True if pushed to list. Note that "R" means Right append, "L" means Left append.
+
+    std::vector<std::string> list = hiredisx::getList("list");
+} else {
+    std::cout << "Error" << std::endl;
+}
+```
+
+*If for whatever reason you need to access the context object, say, for debugging purposes. You can always access it atomically by doing:*
+
+```c++
+redisContext* context = hiredisx::context.load(std::memory_order_acquire);
+```
+
 ## Additional Resources
 
 - If you are interested in contributing or want to get in contact. Email me at :mailbox: hello@chriscates.ca

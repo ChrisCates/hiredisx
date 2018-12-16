@@ -8,11 +8,13 @@
 
 namespace hiredisx {
 
-    redisReply command(std::string command) {
-        redisContext context = hiredisx::context.load(std::memory_order_acquire);
-        redisReply* reply = (redisReply*) redisCommand(&context, command.c_str());
+    namespace op {
+        redisReply* command(std::string command) {
+            redisContext* context = hiredisx::context.load(std::memory_order_acquire);
+            redisReply* reply = (redisReply*) redisCommand(context, command.c_str());
 
-        return *reply;
+            return reply;
+        }
     }
 
 }

@@ -12,18 +12,19 @@ BOOST_AUTO_TEST_CASE(ConfigVariables) {
 }
 
 BOOST_AUTO_TEST_CASE(ConnectSuccess) {
-    hiredisx::connect();
-    redisContext context = hiredisx::context.load(std::memory_order_acquire);
+    bool opened = hiredisx::connect();
 
-    BOOST_CHECK_EQUAL(context.err, 0);
+    BOOST_CHECK_EQUAL(opened, true);
+
+    bool cleared = hiredisx::disconnect();
+
+    BOOST_CHECK_EQUAL(cleared, true);
 }
 
 BOOST_AUTO_TEST_CASE(ConnectFailure) {
-    hiredisx::connect("foobar");
-    redisContext context = hiredisx::context.load(std::memory_order_acquire);
+    bool opened = hiredisx::connect("foobar");
 
-    BOOST_CHECK_EQUAL(context.err, 2);
-    BOOST_CHECK_EQUAL(context.errstr, "nodename nor servname provided, or not known");
+    BOOST_CHECK_EQUAL(opened, false);
 }
 
 

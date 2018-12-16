@@ -5,6 +5,7 @@
 
 #include "hiredisx/connect.hpp"
 #include "hiredisx/command.hpp"
+#include "hiredisx/api.hpp"
 
 namespace hiredisx {
     const std::string version = "0.0.1";

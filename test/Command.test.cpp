@@ -9,10 +9,15 @@
 
 BOOST_AUTO_TEST_SUITE(Command)
 
-BOOST_AUTO_TEST_CASE(CommandPing) {
+BOOST_AUTO_TEST_CASE(CommandOp) {
     redisReply* reply = hiredisx::op::command("PING");
     BOOST_CHECK_EQUAL(reply->str, "PONG");
     freeReplyObject(reply);
+}
+
+BOOST_AUTO_TEST_CASE(CommandPing) {
+    std::string ping = hiredisx::ping();
+    BOOST_CHECK_EQUAL(ping, "PONG");
 }
 
 BOOST_AUTO_TEST_CASE(ApiSetFoo) {
@@ -54,7 +59,7 @@ BOOST_AUTO_TEST_CASE(ApiPushList) {
 }
 
 BOOST_AUTO_TEST_CASE(ApiGetList) {
-    std::vector<std::string> list = hiredisx::getList("list");
+    std::vector<std::string> list = hiredisx::list("list");
 
     BOOST_CHECK_EQUAL(list.size(), 3);
 

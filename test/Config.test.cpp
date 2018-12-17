@@ -24,7 +24,7 @@ BOOST_AUTO_TEST_CASE(ConnectSuccess) {
 }
 
 BOOST_AUTO_TEST_CASE(ConnectFailure) {
-    hiredisx::options.host = "foobar";
+    hiredisx::options::host = "foobar";
     redisContext* ctx = hiredisx::connect();
 
     BOOST_CHECK_EQUAL(ctx->err, 2);
@@ -32,13 +32,13 @@ BOOST_AUTO_TEST_CASE(ConnectFailure) {
 }
 
 BOOST_AUTO_TEST_CASE(CanConnect) {
-    hiredisx::options.host = "localhost";
-    bool connectable = hiredisx::canConnect();
+    hiredisx::options::host = "localhost";
+    bool connectable = hiredisx::test::connect();
 
     BOOST_CHECK_EQUAL(connectable, true);
 
-    hiredisx::options.host = "foobar";
-    bool notConnectable = hiredisx::canConnect();
+    hiredisx::options::host = "foobar";
+    bool notConnectable = hiredisx::test::connect();
 
     BOOST_CHECK_EQUAL(notConnectable, false);
 }

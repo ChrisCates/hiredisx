@@ -17,9 +17,9 @@ BOOST_AUTO_TEST_CASE(ThreadPool) {
     for (int i = 0; i < 10; i++) {
         boost::thread *t = new boost::thread([=]() mutable {
             std::cout << "Created thread " << std::to_string(i) << std::endl;
-            std::string test = hiredisx::get("test");
+            std::string test = hiredisx::ping();
             std::cout << "Thread message " << test << std::endl;
-            BOOST_CHECK_EQUAL(test, "");
+            BOOST_CHECK_EQUAL(test, "PONG");
             std::cout << "Finished with thread " << std::to_string(i) << std::endl;
         });
 

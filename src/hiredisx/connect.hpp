@@ -6,20 +6,20 @@
 
 namespace hiredisx {
 
-    struct OptionsStruct {
+    namespace options {
         std::string host = "localhost";
         int port = 6379;
         int timeoutS = 5;
         int timeoutNS = 0;
-    } options;
+    }
 
     redisContext* connect() {
         struct timeval timeoutStruct = {
-            options.timeoutS,
-            options.timeoutNS
+            options::timeoutS,
+            options::timeoutNS
         };
 
-        redisContext* ctx = redisConnectWithTimeout(options.host.c_str(), options.port, timeoutStruct);
+        redisContext* ctx = redisConnectWithTimeout(options::host.c_str(), options::port, timeoutStruct);
         return ctx;
     }
 
@@ -28,13 +28,15 @@ namespace hiredisx {
         return true;
     }
 
-    bool canConnect() {
-        redisContext* ctx = hiredisx::connect();
-        int status = ctx->err;
-        
-        hiredisx::disconnect(ctx);
+    namespace test {
+        bool connect() {
+            redisContext* ctx = hiredisx::connect();
+            int status = ctx->err;
 
-        return status == 0 ? true : false;
+            hiredisx::disconnect(ctx);
+
+            return status == 0 ? true : false;
+        }
     }
 
 }

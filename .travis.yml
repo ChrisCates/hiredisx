@@ -10,6 +10,10 @@ addons:
       - cmake
 
 before_install:
+  # Make permissions granted
+  - sudo chmod +x /usr/bin/make
+  - sudo chown -R `whoami` /usr/local
+
   # Ubuntu Toolchain
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa -y
   - sudo apt-get update
@@ -23,12 +27,14 @@ install:
   - if [ "$CXX" == "clang++" ]; then sudo apt-get install --allow-unauthenticated -qq clang-3.4; fi
   - if [ "$CXX" == "clang++" ]; then export CXX="clang++-3.4"; fi
 
-  # C++ REST SDK
-  # - sudo apt-get install libcpprest-dev
-
 script:
   - $CXX --version
-  # Will work on getting makes working in Travis CI later...
-  # - mkdir build && cd build
-  # - cmake ..
-  # - make
+  - git clone https://github.com/redis/hiredis --depth 1
+  - cd hiredis
+  - make && make install
+  - cd ..
+  - mkdir build
+  - cd build
+  - cmake ..
+  - make
+  - make install

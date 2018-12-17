@@ -11,6 +11,22 @@
 
 namespace hiredisx {
 
+    std::string ping() {
+        std::string command = "PING";
+        redisReply* reply = hiredisx::op::command(command.c_str());
+
+        std::string value;
+
+        if (reply->type == REDIS_REPLY_ERROR) {
+            value.assign(reply->str, reply->len);
+        } else {
+            value.assign(reply->str, reply->len);
+        }
+
+        freeReplyObject(reply);
+        return value;
+    }
+
     std::string get(std::string key) {
         std::string command = "GET " + key;
         redisReply* reply = hiredisx::op::command(command.c_str());
@@ -57,7 +73,7 @@ namespace hiredisx {
         return success;
     }
 
-    std::vector<std::string> getList(std::string key, int start = 0, int end = -1, std::string prefix = "L") {
+    std::vector<std::string> list(std::string key, int start = 0, int end = -1, std::string prefix = "L") {
         std::string command = prefix + "RANGE " + key + " " + std::to_string(start) + " " + std::to_string(end);
         redisReply* reply = hiredisx::op::command(command.c_str());
 

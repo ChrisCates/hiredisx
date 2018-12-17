@@ -8,6 +8,8 @@
 
 The core intention of the hiredisx library is to create an easier to use threadsafe version of hiredis. Hiredis is very non-prescriptive, making almost no assumptions of your environment. On the otherhand, hiredisx provides some nice easy to use functions for interacting with hiredis that are completely threadsafe and allow for parallel computing... While, also allowing you to interact with redis through the `redisx::op::command` function.
 
+**[Click here for full documentation and usage.](https://hiredisx.chriscates.ca)**
+
 ## Requirements
 
 1. [hiredis](https://github.com/redis/hiredis)
@@ -63,9 +65,11 @@ Then interacting with hiredisx is as simple as just adding:
 **Standard Usage:**
 
 ```c++
-bool validConnection = hiredisx::canConnect();
+bool validConnection = hiredisx::test::connect();
 
 if (validConnection) {
+    std::string ping = hiredisx::ping(); // PONG if valid.
+
     bool set = hiredisx::set("foo", "bar"); // True if set
 
     std::string foo = hiredisx::get("foo"); // "bar" if correct
@@ -74,20 +78,19 @@ if (validConnection) {
 
     bool pushed = hiredisx::push("list", "yo", "R"); // True if pushed to list. Note that "R" means Right append, "L" means Left append.
 
-    std::vector<std::string> list = hiredisx::getList("list");
+    std::vector<std::string> list = hiredisx::list("list", 0, -1, "L"); // 0 is the start of the list, -1 means the end of the list (you can specify a specific length, 10 being first 10 elements for examples).
 }
 ```
 
 **Modifying Connection Options:**
 
-You can modify the connection options by changing the `hiredisx::options` struct.
+You can modify the connection options by changing the `hiredisx::options` values. The following are the default values that are modifyable.
 
 ```c++
-// Below are default and modifyable options for hiredisx
-hiredisx::options.host = "localhost";
-hiredisx::options.port = 6379;
-hiredisx::options.timeoutS = 5; // Timeout in seconds
-hiredisx::options.timeoutNS = 0; // Timeout in nanoseconds
+hiredisx::options::host = "localhost";
+hiredisx::options::port = 6379;
+hiredisx::options::timeoutS = 5; // Timeout in seconds
+hiredisx::options::timeoutNS = 0; // Timeout in nanoseconds
 ```
 
 ## Additional Resources
